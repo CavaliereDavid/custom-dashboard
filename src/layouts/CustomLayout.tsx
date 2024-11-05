@@ -8,8 +8,9 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
-import { createElement, useState, useRef } from "react";
+import { createElement, useState } from "react";
 import GridDashboard from "./GridDashboard";
+import { useGridContext } from "../context/Contexts";
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -46,12 +47,10 @@ const CustomLayout: React.FC = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-  const gridDashboardRef = useRef<{ addChart: (type: string) => void }>(null);
+  const { addChart } = useGridContext();
 
   const handleMenuClick = (type: string) => {
-    if (gridDashboardRef.current) {
-      gridDashboardRef.current.addChart(type);
-    }
+    addChart(type);
   };
 
   return (
@@ -105,19 +104,30 @@ const CustomLayout: React.FC = () => {
 
         <Layout>
           <Header style={{ padding: 0, background: colorBgContainer }}>
-            <Menu theme="light" mode="horizontal">
-              <Menu.Item key="toggle">
-                <Button
-                  type="text"
-                  icon={
-                    collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
-                  }
-                  onClick={() => setCollapsed(!collapsed)}
-                />
-              </Menu.Item>
-              <Menu.Item key="home">Home</Menu.Item>
-              <Menu.Item key="service">Service</Menu.Item>
-            </Menu>
+            <Menu
+              theme="light"
+              mode="horizontal"
+              items={[
+                {
+                  key: "toggle",
+                  label: (
+                    <Button
+                      type="text"
+                      icon={
+                        collapsed ? (
+                          <MenuUnfoldOutlined />
+                        ) : (
+                          <MenuFoldOutlined />
+                        )
+                      }
+                      onClick={() => setCollapsed(!collapsed)}
+                    />
+                  ),
+                },
+                { key: "home", label: "Home" },
+                { key: "service", label: "Service" },
+              ]}
+            />
           </Header>
           <Content style={{ margin: "24px 16px 0" }}>
             <div
@@ -128,7 +138,7 @@ const CustomLayout: React.FC = () => {
                 borderRadius: borderRadiusLG,
               }}
             >
-              <GridDashboard ref={gridDashboardRef} />
+              <GridDashboard />
             </div>
           </Content>
           <Footer>
