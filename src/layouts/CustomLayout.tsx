@@ -10,8 +10,8 @@ import {
 } from "@ant-design/icons";
 import { createElement, useState } from "react";
 import GridDashboard from "./GridDashboard";
-import { useGridContext } from "../contexts";
 import SwitchComponent from "../components/utils/SwitchComponent";
+import { useGridContext } from "../contexts";
 
 const { Header, Footer, Sider, Content } = Layout;
 
