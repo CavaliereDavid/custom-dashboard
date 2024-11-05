@@ -1,9 +1,9 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode } from "react";
 import { Layout } from "react-grid-layout";
-import TooltipDataZoom from "../components/charts/TooltipDataZoom";
+import TooltipDataZoom from "./components/charts/TooltipDataZoom";
 import { Button } from "antd";
-import BasicAreaChart from "../components/charts/BasicAreaChart";
-import BasicBarChart from "../components/charts/BasicBarChart";
+import BasicAreaChart from "./components/charts/BasicAreaChart";
+import BasicBarChart from "./components/charts/BasicBarChart";
 
 interface GridContextType {
   layout: Layout[];
@@ -79,5 +79,37 @@ export const GridProvider: React.FC<{ children: ReactNode }> = ({
     >
       {children}
     </GridContext.Provider>
+  );
+};
+
+/** DragContext */
+interface DragContextType {
+  isDraggable: boolean;
+  toggleDraggable: () => void;
+}
+
+const DragContext = createContext<DragContextType | undefined>(undefined);
+
+export const useDragContext = () => {
+  const context = useContext(DragContext);
+  if (!context) {
+    throw new Error("useDragContext must be used within a DragProvider");
+  }
+  return context;
+};
+
+export const DragProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [isDraggable, setIsDraggable] = useState(false);
+
+  const toggleDraggable = () => {
+    setIsDraggable((prev) => !prev);
+  };
+
+  return (
+    <DragContext.Provider value={{ isDraggable, toggleDraggable }}>
+      {children}
+    </DragContext.Provider>
   );
 };

@@ -1,12 +1,14 @@
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import CustomLayout from "./layouts/CustomLayout";
-import { GridProvider } from "./context/Contexts";
+import { DragProvider, GridProvider } from "./contexts";
 
 function App() {
   return (
     <GridProvider>
-      <CustomLayout />
+      <DragProvider>
+        <CustomLayout />
+      </DragProvider>
     </GridProvider>
   );
 }

@@ -1,15 +1,17 @@
 import { WidthProvider, Responsive } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
-import { useGridContext } from "../context/Contexts";
+import { useDragContext, useGridContext } from "../contexts";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 const GridDashboard: React.FC = () => {
   const { layout, children } = useGridContext();
+  const { isDraggable } = useDragContext();
 
   return (
     <ResponsiveGridLayout
+      key={isDraggable ? "draggable" : "non-draggable"} // Force re-render when isDraggable changes
       className="layout"
       layouts={{ lg: layout }}
       breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
@@ -18,6 +20,8 @@ const GridDashboard: React.FC = () => {
       width={1200}
       resizeHandles={["se"]}
       useCSSTransforms={false}
+      isDraggable={isDraggable}
+      isResizable={isDraggable}
     >
       {children}
     </ResponsiveGridLayout>

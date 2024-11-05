@@ -10,7 +10,8 @@ import {
 } from "@ant-design/icons";
 import { createElement, useState } from "react";
 import GridDashboard from "./GridDashboard";
-import { useGridContext } from "../context/Contexts";
+import { useGridContext } from "../contexts";
+import SwitchComponent from "../components/utils/SwitchComponent";
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -138,6 +139,7 @@ const CustomLayout: React.FC = () => {
                 borderRadius: borderRadiusLG,
               }}
             >
+              <SwitchComponent />
               <GridDashboard />
             </div>
           </Content>
