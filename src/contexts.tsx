@@ -1,7 +1,12 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useCallback,
+} from "react";
 import { Layout } from "react-grid-layout";
 import TooltipDataZoom from "./components/charts/TooltipDataZoom";
-import { Button } from "antd";
 import BasicAreaChart from "./components/charts/BasicAreaChart";
 import BasicBarChart from "./components/charts/BasicBarChart";
 
@@ -28,50 +33,50 @@ export const GridProvider: React.FC<{ children: ReactNode }> = ({
   const [layout, setLayout] = useState<Layout[]>([]);
   const [childrenState, setChildrenState] = useState<ReactNode[]>([]);
 
-  const addChart = (type: string) => {
-    const newKey = `${type}-${layout.length}`;
-    const newItem = { i: newKey, x: 0, y: Infinity, w: 6, h: 8 };
+  const addChart = useCallback(
+    (type: string) => {
+      const newKey = `${type}-${layout.length}`;
+      const newItem = { i: newKey, x: 0, y: Infinity, w: 6, h: 8 };
 
-    let newChart;
-    switch (type) {
-      case "line":
-        newChart = (
-          <div key={newKey}>
-            <TooltipDataZoom />
-            <Button onClick={() => removeChart(newKey)}>Delete</Button>
-          </div>
-        );
-        break;
-      case "area":
-        newChart = (
-          <div key={newKey}>
-            <BasicAreaChart />
-            <Button onClick={() => removeChart(newKey)}>Delete</Button>
-          </div>
-        );
-        break;
-      case "bar":
-        newChart = (
-          <div key={newKey}>
-            <BasicBarChart />
-            <Button onClick={() => removeChart(newKey)}>Delete</Button>
-          </div>
-        );
-        break;
-      default:
-        return;
-    }
+      let newChart;
+      switch (type) {
+        case "line":
+          newChart = (
+            <div key={newKey}>
+              <TooltipDataZoom />
+            </div>
+          );
+          break;
+        case "area":
+          newChart = (
+            <div key={newKey}>
+              <BasicAreaChart />
+            </div>
+          );
+          break;
+        case "bar":
+          newChart = (
+            <div key={newKey}>
+              <BasicBarChart />
+            </div>
+          );
+          break;
+        default:
+          return;
+      }
 
-    setLayout((prevLayout) => [...prevLayout, newItem]);
-    setChildrenState((prevChildren) => [...prevChildren, newChart]);
-  };
+      setLayout((prevLayout) => [...prevLayout, newItem]);
+      setChildrenState((prevChildren) => [...prevChildren, newChart]);
+    },
+    [layout],
+  );
 
-  const removeChart = (key: string) => {
+  const removeChart = useCallback((key: string) => {
     setLayout((prevLayout) => prevLayout.filter((item) => item.i !== key));
     setChildrenState((prevChildren) =>
       prevChildren.filter((child) => (child as React.ReactElement).key !== key),
     );
-  };
+  }, []);
 
   return (
     <GridContext.Provider

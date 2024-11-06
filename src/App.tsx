@@ -1,16 +1,10 @@
+import { routeTree } from "./routeTree.gen";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
-import CustomLayout from "./layouts/CustomLayout";
-import { DragProvider, GridProvider } from "./contexts";
-
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+const router = createRouter({ routeTree });
 function App() {
-  return (
-    <GridProvider>
-      <DragProvider>
-        <CustomLayout />
-      </DragProvider>
-    </GridProvider>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
